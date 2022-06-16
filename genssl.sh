@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 opt_f=0
 mindiff="14" #In days
