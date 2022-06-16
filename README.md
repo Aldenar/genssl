@@ -35,7 +35,7 @@ To enable automatic renewal, the script may be run in cron.
 
 Example /etc/cron.d/genssl:
 ```
-3 0 * * 1,3,5,7 root for cert in /etc/ssl/letsencrypt/*/domains.txt; do genssl.sh "$cert" >> /var/log/genssl.log; done
+3 0 * * 1,3,5,7 root for cert in /etc/ssl/letsencrypt/*/domains.txt; do /path/to/genssl.sh "$cert" >> /var/log/genssl.log; done
 ```
 
 ## Copyright
