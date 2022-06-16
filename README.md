@@ -18,8 +18,8 @@ As such, the user has to have an already configured webserver and a HTTP-Reachab
 The basic usage is simple:
 1. Download the script
 2. Make it executable - `chmod +x genssl.sh`
-3. Create a list of domains to be included in the certificate (1 per line)
-4. Run `genssl.sh *domain_list*`
+3. Create a file with a list of domains to be included in the certificate (1 per line)
+4. Run `genssl.sh *input_file*`
 
 ## Webserver settings
 As the script is meant to be ran automatically (In cron etc), it stores all the HTTP challanges in a central directory (`/tmp/challenges/` by default)
