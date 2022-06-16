@@ -199,7 +199,11 @@ then
                 error=1
             fi
         done
-
+        if [[ "$error" -eq 1 ]]
+        then
+            echo "One (Or more) preflight checks failed, exitting!"
+            exit 1
+        fi
         echo "Domain cert not yet found, attempting to generate!"
         cp "$target_file" "${destination_dir}/domains.txt"
         if [ ! -f "${destination_dir}/account.key" ]; then
@@ -246,12 +250,18 @@ else
         for domain in $(cat "$target_file")
         do
             echo "Prefliht checking domain $domain"
-            if ! http_challenge_check "$domain";
+            if ! http_challenge_check "$domain"
             then
                 echo "Preflight HTTP challenge failed for \"${domain}\""
                 error=1
             fi
         done
+        if [[ "$error" -eq 1 ]]
+        then
+            echo "One (Or more) preflight checks failed, exitting!"
+            exit 1
+        fi
+    
         le_account_key="${destination_dir}/account.key"
         csr=$(generate_csr "$destination_dir" "$target_file")
         generate_crt "$destination_dir" "$le_account_key" "$csr"
@@ -261,5 +271,9 @@ else
             echo "acme_tiny returned non-zero ($rc), please check!"
             exit 1
         fi
+    else
+        echo "Certificate expires in more than $mindiff days ($(echo $(( (cert_expiration_timestamp - current_timestamp) / 60 / 60 / 24)) ) days from now), renewal not needed!"
+        echo "Use -f to forcibly renew the certificate!"
+        exit 0
     fi
 fi
