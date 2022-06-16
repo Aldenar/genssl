@@ -71,6 +71,8 @@ webservers_help(){
     echo "  default_type text/html;"
     echo "}"
     echo ""
+    echo "Then don't forget to relaod the webserver!"
+    echo ""
     read -p "Press enter to continue"
     
 }
@@ -84,7 +86,7 @@ generate_csr(){
     openssl genrsa 4096 > "$dest_dir/domain.key"
     domain_key="$dest_dir/domain.key"
 
-    subjects=$(cat $target_file | tr "\n" " " | sed -E -e 's#^[[:space:]]##g' -e 's#[[:space:]]$##g' -e 's#[[:space:]]+#, DNS:#g' -e 's#^(.)#DNS:\1#')
+    subjects=$(cat $target_file | sed -e '/^$/d' | tr "\n" " " | sed -E -e 's#^[[:space:]]*##g' -e 's#[[:space:]]*$##g' -e 's#[[:space:]]+#, DNS:#g' -e 's#^(.)#DNS:\1#')
     csr_file="${dest_dir}/domain.csr"
     openssl req -new -sha256 -key "$domain_key" -subj "/" -addext "subjectAltName = ${subjects}" > "$csr_file"
     if [ $? -ne 0 ]
